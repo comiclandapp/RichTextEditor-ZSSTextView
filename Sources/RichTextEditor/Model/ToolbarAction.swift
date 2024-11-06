@@ -145,12 +145,12 @@ enum ToolbarAction: Int {
                 "keyboard"
         }
 
-        switch self {
-            case .showSource, .dismissKeyboard:
-                return UIImage(named: systemName)?.withRenderingMode(.alwaysTemplate)
-            default:
+//        switch self {
+//            case .showSource, .dismissKeyboard:
+//                return UIImage(named: systemName)?.withRenderingMode(.alwaysTemplate)
+//            default:
                 return UIImage(systemName: systemName)
-        }
+//        }
     }
 
     func isSelected(_ textAttributes: UITextAttributes) -> Bool {
