@@ -93,7 +93,7 @@ enum ToolbarAction: Int {
 
     var icon: UIImage? {
 
-        let systemName = switch self {
+        let iconName = switch self {
             case .bold:
                 "bold"
             case .italic:
@@ -145,12 +145,12 @@ enum ToolbarAction: Int {
                 "keyboard"
         }
 
-//        switch self {
-//            case .showSource, .dismissKeyboard:
-//                return UIImage(named: systemName)?.withRenderingMode(.alwaysTemplate)
-//            default:
-                return UIImage(systemName: systemName)
-//        }
+        switch self {
+            case .showSource: //, .dismissKeyboard:
+                return UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+            default:
+                return UIImage(systemName: iconName)
+        }
     }
 
     func isSelected(_ textAttributes: UITextAttributes) -> Bool {
