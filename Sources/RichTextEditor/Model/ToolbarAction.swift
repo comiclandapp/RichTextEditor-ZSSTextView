@@ -155,7 +155,7 @@ enum ToolbarAction: Int {
 
     private func getImage (named name : String) -> UIImage? {
         if let image = UIImage(named: name, in: .module, compatibleWith: nil) {
-            return image
+            return image.withRenderingMode(.alwaysTemplate)
         }
         return nil
     }
