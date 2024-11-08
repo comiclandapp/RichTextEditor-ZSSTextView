@@ -53,12 +53,6 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         }
     }
 
-    public var dynamicColor: UIColor {
-        // dynamic color for iOS 13
-        let isDarkMode = UITraitCollection.current.userInterfaceStyle == .dark
-        return isDarkMode ? UIColor.label : UIColor(named: "tintColor")!
-    }
-
     @objc public init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -71,7 +65,7 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
-        toolbarItemTintColor = dynamicColor
+        toolbarItemTintColor = UIColor(named: "iconTintColor")
     }
 
     public override func viewWillAppear(_ animated: Bool) {
