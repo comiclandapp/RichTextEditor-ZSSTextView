@@ -154,8 +154,8 @@ enum ToolbarAction: Int {
     }
 
     private func getImage (named name : String) -> UIImage? {
-        if let imgPath = Bundle.module.path(forResource: name, ofType: ".png") {
-            return UIImage(contentsOfFile: imgPath)
+        if let image = UIImage(named: name, in: .module, compatibleWith: nil) {
+            return image
         }
         return nil
     }
