@@ -146,13 +146,20 @@ enum ToolbarAction: Int {
         }
 
         switch self {
-            case .showSource: //, .dismissKeyboard:
-                return UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+            case .showSource:
+                return getImage(named: iconName)
             default:
                 return UIImage(systemName: iconName)
         }
     }
 
+    private func getImage(named name : String) -> UIImage? {
+        if let imgPath = Bundle.module.path(forResource: name, ofType: ".png") {
+            return UIImage(contentsOfFile: imgPath)
+        }
+        return nil
+    }
+        
     func isSelected(_ textAttributes: UITextAttributes) -> Bool {
 
         switch self {
