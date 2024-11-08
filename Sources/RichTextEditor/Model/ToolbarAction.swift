@@ -146,8 +146,8 @@ enum ToolbarAction: Int {
         }
 
         switch self {
-            case .showSource: //, .dismissKeyboard:
-                return UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+            case .showSource:
+                return UIImage(named: iconName)
             default:
                 return UIImage(systemName: iconName)
         }
