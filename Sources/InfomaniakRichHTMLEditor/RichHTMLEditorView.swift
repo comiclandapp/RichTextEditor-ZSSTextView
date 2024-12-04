@@ -39,6 +39,7 @@ import WebKit
 /// property.
 /// Many functions are available to update the style, such as ``RichHTMLEditorView/bold()``.
 public class RichHTMLEditorView: PlatformView {
+
     // MARK: - Public Properties
 
     /// The HTML code that the editor view contains.

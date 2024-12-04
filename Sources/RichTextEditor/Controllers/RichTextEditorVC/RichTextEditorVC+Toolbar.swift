@@ -58,9 +58,9 @@ extension RichTextEditorVC {
                 presentFontSizeAlert()
 
             case .foregroundColor:
-                presentColorPicker(title: "Text Color", action: .foregroundColor)
+                presentColorPicker(title: textColorLocalizedText, action: .foregroundColor)
             case .backgroundColor:
-                presentColorPicker(title: "Background Color", action: .backgroundColor)
+                presentColorPicker(title: backgroundColorLocalizedText, action: .backgroundColor)
 
             case .outdent:
                 editorView.outdent()
@@ -123,19 +123,19 @@ extension RichTextEditorVC {
 
     private func presentCreateLinkAlert() {
 
-        let alertController = UIAlertController(title: "Create Link",
+        let alertController = UIAlertController(title: createLinkLocalizedText,
                                                 message: nil,
                                                 preferredStyle: .alert)
 
         alertController.addTextField { nameTextField in
-            nameTextField.placeholder = "Label (Optional)"
+            nameTextField.placeholder = self.labelOptionalLocalizedText
         }
         alertController.addTextField { urlTextField in
             urlTextField.placeholder = "URL"
             urlTextField.keyboardType = .URL
         }
 
-        alertController.addAction(UIAlertAction(title: "Add", style: .default) { _ in
+        alertController.addAction(UIAlertAction(title: addLocalizedText, style: .default) { _ in
             guard let rawURL = alertController.textFields?[1].text,
                   let url = URL(string: rawURL)
             else { return }
@@ -143,7 +143,7 @@ extension RichTextEditorVC {
             self.editorView.addLink(url: url,
                                     text: alertController.textFields?[0].text)
         })
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+        alertController.addAction(UIAlertAction(title: cancelLocalizedText, style: .cancel) { _ in
             _ = self.editorView.becomeFirstResponder()
         })
 
@@ -152,7 +152,7 @@ extension RichTextEditorVC {
 
     private func presentFontNameAlert() {
 
-        let alertController = UIAlertController(title: "Choose Font",
+        let alertController = UIAlertController(title: chooseFontLocalizedText,
                                                 message: nil,
                                                 preferredStyle: .actionSheet)
 /*
@@ -188,7 +188,7 @@ extension RichTextEditorVC {
                 self.editorView.setFontName(fontOption)
             })
         }
-        alertController.addAction(UIAlertAction(title: "Cancel",
+        alertController.addAction(UIAlertAction(title: cancelLocalizedText,
                                                 style: .cancel))
 
         present(alertController, animated: true)
@@ -197,8 +197,8 @@ extension RichTextEditorVC {
     private func presentFontSizeAlert() {
 
         let alertController = UIAlertController(
-            title: "Choose Font Size",
-            message: "Choose a font size between 1 and 7",
+            title: chooseFontSizeLocalizedText,
+            message: chooseFontSizeBetweenLocalizedText,
             preferredStyle: .alert
         )
 
@@ -209,12 +209,12 @@ extension RichTextEditorVC {
             }
         }
 
-        alertController.addAction(UIAlertAction(title: "OK",
+        alertController.addAction(UIAlertAction(title: okLocalizedText,
                                                 style: .default) { _ in
             guard let text = alertController.textFields?[0].text, let newSize = Int(text) else { return }
             self.editorView.setFontSize(newSize)
         })
-        alertController.addAction(UIAlertAction(title: "Cancel",
+        alertController.addAction(UIAlertAction(title: cancelLocalizedText,
                                                 style: .cancel))
 
         present(alertController, animated: true)

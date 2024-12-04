@@ -11,32 +11,34 @@
 //  specific language governing permissions and limitations
 //  under the License.
 
+import UIKit
+
 import InfomaniakRichHTMLEditor
 import ZSSTextView
 
-#if canImport(UIKit)
-import UIKit
-
-public typealias PlatformView = UIView
-public typealias PlatformColor = UIColor
-#elseif canImport(AppKit)
-import AppKit
-
-public typealias PlatformView = NSView
-public typealias PlatformColor = NSColor
-#endif
-
 public class RichTextEditorVC: UIViewController, UITextViewDelegate {
+
+    var okLocalizedText = "OK"
+    var cancelLocalizedText = "Cancel"
+    var doneLocalizedText: String?
+    var addLocalizedText = "Add"
+    var createLinkLocalizedText = "Create Link"
+    var textColorLocalizedText = "Text Color"
+    var backgroundColorLocalizedText = "Background Color"
+    var labelOptionalLocalizedText = "Label (Optional)"
+    var chooseFontLocalizedText = "Choose Font"
+    var chooseFontSizeLocalizedText = "Choose Font Size"
+    var chooseFontSizeBetweenLocalizedText = "Choose a font size between 1 and 7"
+
+    /// color to tint the toolbar items
+    var toolbarItemTintColor: UIColor?
 
     var editorView: RichHTMLEditorView!
     var sourceView: ZSSTextView!
-    var toolbarView: PlatformView!
+    var toolbarView: UIView!
     var editorLoaded: Bool = false
     var internalHTML: String?
     let margin: CGFloat = 8
-
-    /// color to tint the toolbar items
-    var toolbarItemTintColor: PlatformColor?
     
     var toolbarCurrentColorPicker: ToolbarAction?
 
@@ -65,7 +67,6 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
-        toolbarItemTintColor = UIColor(named: "iconTintColor")
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -94,10 +95,10 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         let ni = navigationItem
         ni.hidesBackButton = true
 
-//        ni.leftBarButtonItem = UIBarButtonItem(title: "Cancel".localized, style: .plain, target: self, action: #selector(cancelAction))
-//        ni.rightBarButtonItem = UIBarButtonItem(title: "Done".localized, style: .plain, target: self, action: #selector(doneAction))
-        ni.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelAction))
-        ni.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneAction))
+        ni.leftBarButtonItem = UIBarButtonItem(title: cancelLocalizedText, style: .plain, target: self, action: #selector(cancelAction))
+        ni.rightBarButtonItem = UIBarButtonItem(title: doneLocalizedText, style: .plain, target: self, action: #selector(doneAction))
+//        ni.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelAction))
+//        ni.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneAction))
     }
 
     @objc func cancelAction() {
@@ -178,8 +179,8 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
 
     let kToolbarSpacing: CGFloat = -89
 
-    let divider: PlatformView = {
-        let v = PlatformView()
+    let divider: UIView = {
+        let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = .lightGray
         NSLayoutConstraint.activate([
@@ -221,7 +222,7 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
 
         let width = view.safeAreaLayoutGuide.layoutFrame.width
 
-        toolbarView = PlatformView(frame: CGRect(x: 0,
+        toolbarView = UIView(frame: CGRect(x: 0,
                                                  y: 0,
                                                  width: width,
                                                  height: 44))
@@ -239,7 +240,7 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         sourceView.inputAccessoryView = toolbarView
     }
 
-    private func addScrollView(to view: PlatformView) {
+    private func addScrollView(to view: UIView) {
 
         view.addSubview(scrollView)
 
@@ -264,7 +265,7 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         ])
     }
 
-    private func addStackViewRight(to view: PlatformView) {
+    private func addStackViewRight(to view: UIView) {
 
         view.addSubview(stackViewRight)
 
