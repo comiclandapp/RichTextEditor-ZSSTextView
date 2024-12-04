@@ -11,15 +11,17 @@
 //  specific language governing permissions and limitations
 //  under the License.
 
-import InfomaniakRichHTMLEditor
 import UIKit
+
+import InfomaniakRichHTMLEditor
 
 extension RichTextEditorVC: RichHTMLEditorViewDelegate {
 
     public func richHTMLEditorViewDidLoad(_ richHTMLEditorView: RichHTMLEditorView) {
+
         _ = richHTMLEditorView.becomeFirstResponder()
         editorLoaded = true
-        updateHTML()
+        setHTML()
     }
 
     public func richHTMLEditorView(_ richHTMLEditorView: RichHTMLEditorView,

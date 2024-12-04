@@ -17,7 +17,7 @@ import InfomaniakRichHTMLEditor
 import ZSSTextView
 
 public class RichTextEditorVC: UIViewController, UITextViewDelegate {
-
+    
     public var okLocalizedText = "OK"
     public var cancelLocalizedText = "Cancel"
     public var doneLocalizedText = "Done"
@@ -29,157 +29,20 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
     public var chooseFontLocalizedText = "Choose Font"
     public var chooseFontSizeLocalizedText = "Choose Font Size"
     public var chooseFontSizeBetweenLocalizedText = "Choose a font size between 1 and 7"
-
+    
     /// color to tint the toolbar items
     public var toolbarItemTintColor: UIColor?
 
-    var editorView: RichHTMLEditorView!
-    var sourceView: ZSSTextView!
-    var toolbarView: UIView!
     var editorLoaded: Bool = false
-    var internalHTML: String?
-    let margin: CGFloat = 8
-    
+    private var internalHTML: String?
+
     var toolbarCurrentColorPicker: ToolbarAction?
-
-    /// The HTML code that the editor view contains.
-    @objc public var html: String {
-        get {
-            return editorView?.html ?? ""
-        }
-        set {
-            internalHTML = newValue
-            if editorLoaded {
-                updateHTML()
-            }
-        }
-    }
-
-    @objc public init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("This class does not support NSCoder")
-    }
-
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = .systemBackground
-    }
-
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        registerKeyboardNotifications()
-        configureButtons()
-    }
-
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        createEditorView()
-        createSourceView()
-        createToolbarView()
-    }
-
-    func updateHTML() {
-        if let html = internalHTML {
-            editorView?.html = html
-            sourceView?.text = html
-        }
-    }
-
-    func configureButtons() {
-        let ni = navigationItem
-        ni.hidesBackButton = true
-
-        ni.leftBarButtonItem = UIBarButtonItem(title: cancelLocalizedText, style: .plain, target: self, action: #selector(cancelAction))
-        ni.rightBarButtonItem = UIBarButtonItem(title: doneLocalizedText, style: .plain, target: self, action: #selector(doneAction))
-//        ni.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelAction))
-//        ni.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneAction))
-    }
-
-    @objc func cancelAction() {
-
-        view.snapshotView(afterScreenUpdates: true)
-        navigationController?.popViewController(animated: true)
-    }
-
-    @objc func doneAction() {
-
-        // make sure the notification happens on the main thread
-        // wait a sec
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            let nc = NotificationCenter.default
-            nc.post(name: Notification.Name("NewInfoAvailable"), object: self.editorView.html)
-        }
-
-        cancelAction()
-    }
-
-    // MARK: - Set up editor
-
-    func createEditorView() {
-
-        editorView = RichHTMLEditorView()
-
-        if let cssURL = Bundle.main.url(forResource: "editor", withExtension: "css"), let css = try? String(contentsOf: cssURL) {
-            editorView.injectAdditionalCSS(css)
-        }
-        editorView.translatesAutoresizingMaskIntoConstraints = false
-        editorView.delegate = self
-        editorView.isScrollEnabled = true
-        editorView.webView.scrollView.keyboardDismissMode = .interactive
-        editorView.isOpaque = false
-        editorView.backgroundColor = .systemBackground
-
-        view.addSubview(editorView)
-
-        let g = view.safeAreaLayoutGuide
-
-        NSLayoutConstraint.activate([
-            editorView.topAnchor.constraint(equalTo: g.topAnchor, constant: margin),
-            editorView.bottomAnchor.constraint(equalTo: g.bottomAnchor, constant: -margin),
-            editorView.trailingAnchor.constraint(equalTo: g.trailingAnchor, constant: -margin),
-            editorView.leadingAnchor.constraint(equalTo: g.leadingAnchor, constant: margin)
-        ])
-    }
-
-    // MARK: - Set up source editor
-
-    func createSourceView() {
-
-        sourceView = ZSSTextView()
-
-        sourceView.translatesAutoresizingMaskIntoConstraints = false
-        sourceView.delegate = self
-        sourceView.isHidden = true
-
-        sourceView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        sourceView.autoresizesSubviews = true
-        sourceView.adjustsFontForContentSizeCategory = true
-
-        sourceView.font = UIFont.preferredFont(forTextStyle: .subheadline)
-
-        view.addSubview(sourceView)
-
-        let g = view.safeAreaLayoutGuide
-
-        NSLayoutConstraint.activate([
-            sourceView.topAnchor.constraint(equalTo: g.topAnchor, constant: margin),
-            sourceView.bottomAnchor.constraint(equalTo: g.bottomAnchor, constant: -margin),
-            sourceView.trailingAnchor.constraint(equalTo: g.trailingAnchor, constant: -margin),
-            sourceView.leadingAnchor.constraint(equalTo: g.leadingAnchor, constant: margin)
-        ])
-    }
-
+    
     // MARK: - create toolbar views
-
+    
     let kToolbarSpacing: CGFloat = -89
-
-    let divider: UIView = {
+    
+    lazy var divider: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = .lightGray
@@ -189,16 +52,16 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         ])
         return v
     }()
-
-    let scrollView: UIScrollView = {
+    
+    lazy var scrollView: UIScrollView = {
         let v = UIScrollView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.showsHorizontalScrollIndicator = false
         v.contentInsetAdjustmentBehavior = .never
         return v
     }()
-
-    let stackViewLeft: UIStackView = {
+    
+    lazy var stackViewLeft: UIStackView = {
         let v = UIStackView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.axis = .horizontal
@@ -207,8 +70,8 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         v.isLayoutMarginsRelativeArrangement = true
         return v
     }()
-
-    let stackViewRight: UIStackView = {
+    
+    lazy var stackViewRight: UIStackView = {
         let v = UIStackView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.axis = .horizontal
@@ -217,19 +80,160 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         v.isLayoutMarginsRelativeArrangement = true
         return v
     }()
+    
+    lazy var editorView: RichHTMLEditorView = {
+        
+        let view = RichHTMLEditorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        if let cssURL = Bundle.main.url(forResource: "editor", withExtension: "css"), let css = try? String(contentsOf: cssURL) {
+            view.injectAdditionalCSS(css)
+        }
+        
+        view.delegate = self
+        view.isScrollEnabled = true
+        view.webView.scrollView.keyboardDismissMode = .interactive
+        view.isOpaque = false
+        view.backgroundColor = .systemBackground
+        
+        return view
+    }()
 
-    func createToolbarView() {
+    lazy var sourceView: ZSSTextView = {
+        
+        let view = ZSSTextView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.delegate = self
+        view.isHidden = true
+        
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.autoresizesSubviews = true
+        view.adjustsFontForContentSizeCategory = true
+        
+        view.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        
+        return view
+    }()
+    
+    lazy var toolbarView: UIView = {
 
         let width = view.safeAreaLayoutGuide.layoutFrame.width
 
-        toolbarView = UIView(frame: CGRect(x: 0,
-                                                 y: 0,
-                                                 width: width,
-                                                 height: 44))
-        toolbarView.backgroundColor = .systemGray6
-//        toolbarView.alpha = 0.0
+        let view = UIView(frame: CGRect(x: 0,
+                                        y: 0,
+                                        width: width,
+                                        height: 44))
+        view.backgroundColor = .systemGray6
+        // view.alpha = 0.0
 
-        setupAllButtons()
+        return view
+    }()
+
+    /// The HTML code that the editor view contains.
+    @objc public var html: String {
+        get {
+            return editorView.html
+        }
+        set {
+            internalHTML = newValue
+            if editorLoaded {
+                setHTML()
+            }
+        }
+    }
+    
+    @objc public init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("This class does not support NSCoder")
+    }
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupInternalViews()
+        activateConstraints()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        registerKeyboardNotifications()
+    }
+    
+    func setHTML() {
+        
+        if let html = internalHTML {
+            editorView.html = html
+            sourceView.text = html
+        }
+    }
+
+    @objc func cancelAction() {
+        
+        view.snapshotView(afterScreenUpdates: true)
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func doneAction() {
+        
+        // make sure the notification happens on the main thread
+        // wait a sec
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            let nc = NotificationCenter.default
+            nc.post(name: Notification.Name("NewInfoAvailable"), object: self.editorView.html)
+        }
+        
+        cancelAction()
+    }
+}
+
+private extension RichTextEditorVC {
+
+    private func setupInternalViews() {
+        
+        view.backgroundColor = .systemBackground
+        
+        view.addSubview(editorView)
+        view.addSubview(sourceView)
+
+        createToolbarView()
+        setupToolbarButtons()
+
+        configureNavButtons()
+    }
+
+    private func activateConstraints() {
+        
+        let margins = view.safeAreaLayoutGuide
+        let margin: CGFloat = 8
+        
+        NSLayoutConstraint.activate([
+            editorView.topAnchor.constraint(equalTo: margins.topAnchor, constant: margin),
+            editorView.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -margin),
+            editorView.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -margin),
+            editorView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: margin),
+            
+            sourceView.topAnchor.constraint(equalTo: margins.topAnchor, constant: margin),
+            sourceView.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -margin),
+            sourceView.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -margin),
+            sourceView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: margin)
+        ])
+    }
+
+    private func configureNavButtons() {
+        
+        let ni = navigationItem
+        ni.hidesBackButton = true
+        
+        ni.leftBarButtonItem = UIBarButtonItem(title: cancelLocalizedText, style: .plain, target: self, action: #selector(cancelAction))
+        ni.rightBarButtonItem = UIBarButtonItem(title: doneLocalizedText, style: .plain, target: self, action: #selector(doneAction))
+    }
+    
+    private func createToolbarView() {
 
         addScrollView(to: toolbarView)
         addStackViewLeft(to: scrollView)
@@ -278,7 +282,7 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         ])
     }
 
-    private func setupAllButtons() {
+    private func setupToolbarButtons() {
 
         for group in ToolbarAction.actionGroup {
             for action in group {
