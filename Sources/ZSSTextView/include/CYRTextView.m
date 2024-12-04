@@ -125,11 +125,15 @@ static const float kCursorVelocity = 1.0f/8.0f;
 
 #pragma mark - KVO
 
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+- (void) observeValueForKeyPath: (NSString *)keyPath
+                       ofObject: (id)object
+                         change: (NSDictionary *)change
+                        context: (void *)context {
 
     if ([keyPath isEqualToString: NSStringFromSelector(@selector(font))] && context == CYRTextViewContext) {
 
-        // Whenever the UITextView font is changed we want to keep a reference in the stickyFont ivar. We do this to counteract a bug where the underlying font can be changed without notice and cause undesired behaviour.
+        // Whenever the UITextView font is changed we want to keep a reference in the stickyFont ivar.
+        // We do this to counteract a bug where the underlying font can be changed without notice and cause undesired behaviour.
         self.syntaxTextStorage.defaultFont = self.font;
     }
     else if ([keyPath isEqualToString:NSStringFromSelector(@selector(textColor))] && context == CYRTextViewContext) {
@@ -167,7 +171,8 @@ static const float kCursorVelocity = 1.0f/8.0f;
 
     UITextRange* textRange = [self textRangeFromPosition: self.beginningOfDocument
                                               toPosition: self.endOfDocument];
-    [self replaceRange: textRange withText: text];
+    [self replaceRange: textRange
+              withText: text];
 }
 
 #pragma mark - Line Drawing

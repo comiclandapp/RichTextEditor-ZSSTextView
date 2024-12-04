@@ -179,12 +179,12 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
     }
     
     @objc func doneAction() {
-        
+
         // make sure the notification happens on the main thread
-        // wait a sec
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.async {
             let nc = NotificationCenter.default
-            nc.post(name: Notification.Name("NewInfoAvailable"), object: self.editorView.html)
+            nc.post(name: Notification.Name("NewInfoAvailable"),
+                    object: self.html)
         }
         
         cancelAction()
