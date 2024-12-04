@@ -20,7 +20,7 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
 
     var okLocalizedText = "OK"
     var cancelLocalizedText = "Cancel"
-    var doneLocalizedText: String?
+    var doneLocalizedText = "Done"
     var addLocalizedText = "Add"
     var createLinkLocalizedText = "Create Link"
     var textColorLocalizedText = "Text Color"
