@@ -18,20 +18,20 @@ import ZSSTextView
 
 public class RichTextEditorVC: UIViewController, UITextViewDelegate {
 
-    var okLocalizedText = "OK"
-    var cancelLocalizedText = "Cancel"
-    var doneLocalizedText = "Done"
-    var addLocalizedText = "Add"
-    var createLinkLocalizedText = "Create Link"
-    var textColorLocalizedText = "Text Color"
-    var backgroundColorLocalizedText = "Background Color"
-    var labelOptionalLocalizedText = "Label (Optional)"
-    var chooseFontLocalizedText = "Choose Font"
-    var chooseFontSizeLocalizedText = "Choose Font Size"
-    var chooseFontSizeBetweenLocalizedText = "Choose a font size between 1 and 7"
+    public var okLocalizedText = "OK"
+    public var cancelLocalizedText = "Cancel"
+    public var doneLocalizedText = "Done"
+    public var addLocalizedText = "Add"
+    public var createLinkLocalizedText = "Create Link"
+    public var textColorLocalizedText = "Text Color"
+    public var backgroundColorLocalizedText = "Background Color"
+    public var labelOptionalLocalizedText = "Label (Optional)"
+    public var chooseFontLocalizedText = "Choose Font"
+    public var chooseFontSizeLocalizedText = "Choose Font Size"
+    public var chooseFontSizeBetweenLocalizedText = "Choose a font size between 1 and 7"
 
     /// color to tint the toolbar items
-    var toolbarItemTintColor: UIColor?
+    public var toolbarItemTintColor: UIColor?
 
     var editorView: RichHTMLEditorView!
     var sourceView: ZSSTextView!
