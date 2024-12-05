@@ -1,6 +1,38 @@
+@media (prefers-color-scheme: dark) {
+
+    /* root tag inverting all the components color except the table.*/
+    : root {
+        color-scheme: light dark;
+        filter: invert(100%);
+        -webkit-filter: invert(100%)
+    }
+
+    /*table tag needed for inverting table content.*/
+    table {
+        filter: invert(100%);
+    }
+
+    /*
+    html {
+        filter: invert(1)  hue-rotate(.5turn);
+    }
+     */
+
+    /* If We do color invert in : root , images will be color inverted and it will be in negative. If we invert again these negative images, it will be positive.
+     img {
+        filter: invert(1)  hue-rotate(.5turn);
+     }
+     img {
+        filter: invert(100%);
+     }
+     */
+}
+
+/*
 :root {
     color-scheme: light dark;
 }
+ */
 
 body {
     margin: 0;
@@ -10,13 +42,4 @@ body {
 
 #swift-rich-html-editor {
     outline-style: none;
-}
-
-@media (prefers-color-scheme: dark) {
-    html{
-        filter: invert(1)  hue-rotate(.5turn);
-    }
-    img {
-        filter: invert(1)  hue-rotate(.5turn);
-    }
 }
