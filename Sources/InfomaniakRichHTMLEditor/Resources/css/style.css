@@ -11,3 +11,12 @@ body {
 #swift-rich-html-editor {
     outline-style: none;
 }
+
+@media (prefers-color-scheme: dark) {
+    html{
+        filter: invert(1)  hue-rotate(.5turn);
+    }
+    img {
+        filter: invert(1)  hue-rotate(.5turn);
+    }
+}
