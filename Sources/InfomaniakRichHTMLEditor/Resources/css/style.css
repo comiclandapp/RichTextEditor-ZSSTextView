@@ -1,45 +1,34 @@
-@media (prefers-color-scheme: dark) {
-
-    /* root tag inverting all the components color except the table.*/
-    : root {
-        color-scheme: light dark;
-        filter: invert(100%);
-        -webkit-filter: invert(100%)
-    }
-
-    /*table tag needed for inverting table content.*/
-    table {
-        filter: invert(100%);
-    }
-
-    /*
-    html {
-        filter: invert(1)  hue-rotate(.5turn);
-    }
-     */
-
-    /* If We do color invert in : root , images will be color inverted and it will be in negative. If we invert again these negative images, it will be positive.
-     img {
-        filter: invert(1)  hue-rotate(.5turn);
-     }
-     img {
-        filter: invert(100%);
-     }
-     */
-}
-
-/*
 :root {
     color-scheme: light dark;
+        --h1-color: red;
+        --header-bg-clr: green;
+        --header-txt-clr: black;
+    }
+    @media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: light dark;
+        --h1-color: #ff8080;
+        --header-bg-clr: #80ff80;
+        --header-txt-clr: white;
+    }
 }
- */
-
 body {
     margin: 0;
     padding: 0;
     font-family: -apple-system;
 }
+h1 {
+    color: var(--h1-color);
+}
+.header {
+    background-color: var (--header-bg-clr);
+    color: var(--header-txt-clr);
+}
 
 #swift-rich-html-editor {
     outline-style: none;
 }
+
+/*
+ https://varun04tomar.medium.com/dark-mode-in-ios-detailing-every-thing-from-start-to-end-swift-fe76a0ee2324
+ */
