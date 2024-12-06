@@ -39,9 +39,9 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
     var toolbarCurrentColorPicker: ToolbarAction?
     
     // MARK: - create toolbar views
-    
+
     let kToolbarSpacing: CGFloat = -89
-    
+
     lazy var divider: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         ])
         return v
     }()
-    
+
     lazy var scrollView: UIScrollView = {
         let v = UIScrollView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -60,7 +60,7 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
         v.contentInsetAdjustmentBehavior = .never
         return v
     }()
-    
+
     lazy var stackViewLeft: UIStackView = {
         let v = UIStackView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -133,16 +133,16 @@ public class RichTextEditorVC: UIViewController, UITextViewDelegate {
     /// The HTML code that the editor view contains.
     @objc public var html: String {
         get {
-            return editorView.html
+            return sourceView.isHidden ? editorView.html : sourceView.text
         }
         set {
-            internalHTML = newValue
+            internalHTML = newValue.deleteHTMLTags().isEmpty ? "" : newValue
             if editorLoaded {
                 setHTML()
             }
         }
     }
-    
+
     @objc public init() {
         super.init(nibName: nil, bundle: nil)
     }
